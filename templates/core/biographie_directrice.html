@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Biographie - {{ directrice.signature }} - LIKITA Group{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    {% if directrice %}
+    <!-- Hero Section -->
+    <div class="hero-section mb-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 text-center mb-4 mb-lg-0">
+                    {% if directrice.photo %}
+                    <img src="{{ directrice.photo.url }}" alt="{{ directrice.signature }}" 
+                         class="img-fluid rounded-circle shadow-lg" style="max-width: 300px; border: 5px solid var(--likita-yellow);">
+                    {% else %}
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 300px; height: 300px;">
+                        <i class="fas fa-user fa-5x text-muted"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold text-white mb-3">{{ directrice.signature }}</h1>
+                    <p class="lead text-white mb-4">{{ directrice.fonction }}</p>
+                    {% if directrice.biographie_complete %}
+                    <p class="text-white">{{ directrice.biographie_complete|truncatewords:30 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formation -->
+    {% if directrice.formation %}
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="mb-4">
+                        <i class="fas fa-graduation-cap text-primary"></i> Formation
+                    </h2>
+                    <div class="article-content">
+                        {{ directrice.formation|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Compétences et Expériences -->
+    {% if directrice.competences %}
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="mb-4">
+                        <i class="fas fa-briefcase text-primary"></i> Compétences et Expériences
+                    </h2>
+                    <div class="article-content">
+                        {{ directrice.competences|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Engagement Communautaire -->
+    {% if directrice.engagement_communautaire %}
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="mb-4">
+                        <i class="fas fa-hands-helping text-primary"></i> Engagement Communautaire
+                    </h2>
+                    <div class="article-content">
+                        {{ directrice.engagement_communautaire|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Biographie Complète -->
+    {% if directrice.biographie_complete %}
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="mb-4">
+                        <i class="fas fa-user text-primary"></i> Biographie
+                    </h2>
+                    <div class="article-content">
+                        {{ directrice.biographie_complete|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Message de la Directrice -->
+    {% if directrice.contenu %}
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm bg-beige">
+                <div class="card-body p-4">
+                    <h2 class="mb-4">
+                        <i class="fas fa-quote-left text-primary"></i> Message de la Directrice
+                    </h2>
+                    <div class="message-content">
+                        {{ directrice.contenu|linebreaks }}
+                    </div>
+                    <div class="mt-4 pt-4 border-top">
+                        <p class="mb-0">
+                            <strong class="fs-5">{{ directrice.signature }}</strong><br>
+                            <span class="text-muted">{{ directrice.fonction }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Liens de navigation -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <a href="{% url 'core:message_directrice' %}" class="btn btn-primary btn-lg me-3">
+                <i class="fas fa-envelope"></i> Lire le Message
+            </a>
+            <a href="{% url 'core:about' %}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-users"></i> Notre Équipe
+            </a>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="alert alert-info">
+        <h4>Biographie en préparation</h4>
+        <p>La biographie de la Directrice Générale sera bientôt disponible.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

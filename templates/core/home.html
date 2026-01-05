@@ -1,0 +1,382 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Accueil - LIKITA Group{% endblock %}
+
+{% block content %}
+<!-- Hero Section - Design Figma Style -->
+<section class="hero-section text-white py-5 mb-0">
+    <div class="container">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="hero-content">
+                    <span class="hero-badge mb-3">Bienvenue</span>
+                    <h1 class="display-3 fw-bold mb-4 hero-title">LIKITA Group</h1>
+                    <p class="lead mb-4 hero-subtitle">Likita Group est une entreprise multisectorielle spécialisée dans la communication, formations et organisations d'événements !</p>
+                    <p class="lead mb-4 hero-subtitle">💡 <strong>Likita Group, c'est là où les idées prennent vie</strong></p>
+                    <div class="hero-buttons">
+                        <a href="{% url 'core:about' %}" class="btn btn-light btn-lg me-3 mb-2 mb-md-0">
+                            <i class="fas fa-arrow-right me-2"></i>Découvrir
+                        </a>
+                        <a href="{% url 'events:liste_evenements' %}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-calendar-alt me-2"></i>Nos Événements
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image-wrapper">
+                    <div class="hero-icon-circle">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="hero-decoration"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-wave">
+        <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 50L60 45C120 40 240 30 360 28.3C480 26.7 600 33.3 720 38.3C840 43.3 960 46.7 1080 45C1200 43.3 1320 36.7 1380 33.3L1440 30V100H1380C1320 100 1200 100 1080 100C960 100 840 100 720 100C600 100 480 100 360 100C240 100 120 100 60 100H0V50Z" fill="#F8E6B0"/>
+        </svg>
+    </div>
+</section>
+
+<!-- Message de la Directrice - Design Figma Style -->
+{% if message_directrice %}
+<section class="section-beige py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="directrice-card">
+                    <div class="row g-0">
+                        {% if message_directrice.photo %}
+                        <div class="col-md-4 directrice-photo-wrapper">
+                            <div class="directrice-photo">
+                                <img src="{{ message_directrice.photo.url }}" alt="{{ message_directrice.signature }}" 
+                                     class="img-fluid">
+                                <div class="photo-overlay"></div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="col-md-8">
+                            <div class="directrice-content">
+                                <span class="section-badge">Message</span>
+                                <h2 class="section-title mb-4">{{ message_directrice.titre }}</h2>
+                                <p class="directrice-text">{{ message_directrice.contenu|truncatewords:50 }}</p>
+                                <a href="{% url 'core:message_directrice' %}" class="btn btn-primary mt-3">
+                                    Lire la suite <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                                <div class="directrice-signature mt-4">
+                                    <p class="mb-0">
+                                        <strong>{{ message_directrice.signature }}</strong><br>
+                                        <span class="text-muted">{{ message_directrice.fonction }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Vision & Mission - Design Figma Style -->
+{% if vision or mission %}
+<section class="section-white py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge">À propos</span>
+            <h2 class="section-title">Notre Vision & Mission</h2>
+        </div>
+        <div class="row g-4">
+            {% if vision %}
+            <div class="col-md-6">
+                <div class="vision-mission-card vision-card">
+                    <div class="card-icon-wrapper">
+                        <div class="card-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <h3 class="card-title">Notre Vision</h3>
+                    <p class="card-text">{{ vision.description }}</p>
+                </div>
+            </div>
+            {% endif %}
+            {% if mission %}
+            <div class="col-md-6">
+                <div class="vision-mission-card mission-card">
+                    <div class="card-icon-wrapper">
+                        <div class="card-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                    </div>
+                    <h3 class="card-title">Notre Mission</h3>
+                    <p class="card-text">{{ mission.description }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Nos Valeurs - Design Figma Style -->
+{% if valeurs %}
+<section class="section-brown py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge section-badge-light">Nos Fondements</span>
+            <h2 class="section-title section-title-light">Nos Valeurs</h2>
+        </div>
+        <div class="row g-4">
+            {% for valeur in valeurs %}
+            {% if valeur.ordre_affichage <= 4 %}
+            <div class="col-md-3">
+                <div class="valeur-card">
+                    <div class="valeur-icon-wrapper">
+                        {% if valeur.icone %}
+                        <i class="{{ valeur.icone }} valeur-icon"></i>
+                        {% else %}
+                        <i class="fas fa-heart valeur-icon"></i>
+                        {% endif %}
+                    </div>
+                    <h4 class="valeur-title">{{ valeur.titre }}</h4>
+                    <p class="valeur-text">{{ valeur.description }}</p>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Nos Pôles -->
+<section class="section-beige py-5">
+    <div class="container">
+        <h2 class="text-center mb-5" style="color: var(--likita-brown);">Nos Pôles</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-video fa-4x mb-3 text-primary"></i>
+                        <h4 style="color: var(--likita-brown);">Émission LIKITA</h4>
+                        <p style="color: var(--likita-brown);">Une plateforme médiatique qui met en lumière des histoires inspirantes de femmes, promeut leurs réalisations et partage des témoignages et conseils pratiques.</p>
+                        <a href="{% url 'media_app:liste_emissions' %}" class="btn btn-primary">Voir les émissions</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-calendar-alt fa-4x mb-3 text-primary"></i>
+                        <h4 style="color: var(--likita-brown);">LIKITA Events</h4>
+                        <p style="color: var(--likita-brown);">Nous vous accompagnons dans la planification et l'organisation d'événements, en offrant des services sur mesure pour maximiser leur impact.</p>
+                        <a href="{% url 'events:liste_evenements' %}" class="btn btn-primary">Voir les événements</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-graduation-cap fa-4x mb-3 text-primary"></i>
+                        <h4 style="color: var(--likita-brown);">LIKITA Academia</h4>
+                        <p style="color: var(--likita-brown);">Un centre de formation dédié au développement personnel et professionnel avec des programmes variés et des certifications.</p>
+                        <a href="{% url 'academia:liste_formations' %}" class="btn btn-primary">Voir les formations</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 mx-auto">
+                <div class="card h-100 border-0 shadow-sm bg-primary">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-users fa-4x mb-3 text-white"></i>
+                        <h4 class="text-white">Forum Mwasi Mwinda</h4>
+                        <p class="text-white">Un événement annuel qui célèbre les réalisations féminines et encourage le dialogue sur des sujets d'actualité.</p>
+                        <a href="{% url 'events:liste_evenements' %}?type=forum" class="btn btn-light">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Équipe - Design Figma Style -->
+{% if membres %}
+<section class="section-white py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge">Notre Équipe</span>
+            <h2 class="section-title">Rencontrez Notre Équipe</h2>
+        </div>
+        <div class="row g-4">
+            {% for membre in membres %}
+            <div class="col-md-4 col-lg-3">
+                <div class="team-card">
+                    <div class="team-photo-wrapper">
+                        {% if membre.photo %}
+                        <img src="{{ membre.photo.url }}" alt="{{ membre.nom_complet }}" class="team-photo">
+                        {% else %}
+                        <div class="team-photo-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        {% endif %}
+                        <div class="team-overlay">
+                            <div class="team-social">
+                                <a href="#" class="team-social-link"><i class="fas fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h5 class="team-name">{{ membre.nom_complet }}</h5>
+                        <p class="team-role">{{ membre.fonction }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'core:about' %}" class="btn btn-primary btn-lg">
+                Voir toute l'équipe <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Section Carrousel Photos du Lancement -->
+{% if photos_lancement and photos_lancement|length > 0 %}
+<section class="section-beige py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge">Notre Histoire</span>
+            <h2 class="section-title">Lancement de LIKITA Group</h2>
+            <p class="lead">Découvrez les moments forts de notre lancement</p>
+        </div>
+        
+        <!-- Carrousel Bootstrap avec défilement automatique -->
+        <div id="carouselLancement" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
+            <!-- Indicateurs -->
+            <div class="carousel-indicators">
+                {% for photo in photos_lancement %}
+                {% if photo.image %}
+                <button type="button" data-bs-target="#carouselLancement" data-bs-slide-to="{{ forloop.counter0 }}" 
+                        {% if forloop.first %}class="active" aria-current="true"{% endif %} 
+                        aria-label="Slide {{ forloop.counter }}"></button>
+                {% endif %}
+                {% endfor %}
+            </div>
+            
+            <!-- Slides -->
+            <div class="carousel-inner rounded shadow-lg">
+                {% for photo in photos_lancement %}
+                {% if photo.image %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="4000">
+                    <img src="{{ photo.image.url }}" 
+                         class="d-block w-100 carousel-image" 
+                         alt="{{ photo.titre|default:'Photo du lancement' }}"
+                         style="height: 600px; object-fit: cover;">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{ photo.titre|default:'Lancement de LIKITA Group' }}</h5>
+                        {% if photo.evenement %}
+                        <p>{{ photo.evenement.titre }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            
+            <!-- Contrôles -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselLancement" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Précédent</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselLancement" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Suivant</span>
+            </button>
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{% url 'core:galerie_activites' %}" class="btn btn-primary btn-lg">
+                Voir toutes les photos <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="section-beige py-5">
+    <div class="container">
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle fa-2x mb-3"></i>
+            <h5>Aucune photo disponible pour le moment</h5>
+            <p>Pour afficher les photos du lancement, veuillez les ajouter dans l'administration Django.</p>
+            <a href="/admin/events/galerieevenement/add/" class="btn btn-primary mt-2">
+                <i class="fas fa-plus"></i> Ajouter des photos
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<style>
+/* Styles pour le carrousel */
+#carouselLancement {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.carousel-image {
+    border-radius: 10px;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: var(--likita-yellow);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.carousel-indicators button {
+    background-color: var(--likita-yellow);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 0 5px;
+}
+
+.carousel-indicators button.active {
+    background-color: var(--likita-brown);
+}
+
+/* Animation fade pour le carrousel */
+.carousel-fade .carousel-item {
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 1s;
+}
+
+.carousel-fade .carousel-item.active,
+.carousel-fade .carousel-item-next.carousel-item-start,
+.carousel-fade .carousel-item-prev.carousel-item-end {
+    opacity: 1;
+}
+
+.carousel-fade .active.carousel-item-start,
+.carousel-fade .active.carousel-item-end {
+    opacity: 0;
+}
+</style>
+{% endblock %}
+

@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nos Services - LIKITA Group{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="hero-section mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold text-white mb-3">Nos Services</h1>
+                    <p class="lead text-white">Likita Group est une entreprise multisectorielle spécialisée dans la communication, formations et organisations d'événements !</p>
+                    <p class="lead text-white">💡 <strong>Likita Group, c'est là où les idées prennent vie</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Émission LIKITA -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-lg mb-4">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center mb-4 mb-md-0">
+                            <i class="fas fa-video fa-5x text-primary"></i>
+                        </div>
+                        <div class="col-md-10">
+                            <h2 class="mb-4">Émission LIKITA</h2>
+                            <p class="lead">Une plateforme médiatique qui met en lumière des histoires inspirantes de femmes, promeut leurs réalisations et partage des témoignages et conseils pratiques.</p>
+                            
+                            <h4 class="mt-4 mb-3">Contenu</h4>
+                            <p>Des interviews inspirantes, des témoignages de femmes influentes et des conseils pratiques, mettant en lumière des parcours réussis et des stratégies de développement personnel et professionnel.</p>
+                            
+                            <h4 class="mt-4 mb-3">Objectif</h4>
+                            <p>Offrir une plateforme médiatique qui inspire, motive et éduque les femmes à travers des récits authentiques et des outils concrets pour réussir.</p>
+                            
+                            <h4 class="mt-4 mb-3">Formats</h4>
+                            <ul>
+                                <li>Interviews</li>
+                                <li>Discussions en panel</li>
+                                <li>Segments éducatifs</li>
+                            </ul>
+                            
+                            <h4 class="mt-4 mb-3">Thématiques</h4>
+                            <ul>
+                                <li>Initiatives communautaires</li>
+                                <li>Entrepreneuriat</li>
+                                <li>Leadership</li>
+                                <li>Innovation</li>
+                            </ul>
+                            
+                            <div class="mt-4">
+                                <a href="{% url 'media_app:liste_emissions' %}" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-video"></i> Voir les émissions
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIKITA Events -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-lg mb-4">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center mb-4 mb-md-0">
+                            <i class="fas fa-calendar-alt fa-5x text-primary"></i>
+                        </div>
+                        <div class="col-md-10">
+                            <h2 class="mb-4">LIKITA Events</h2>
+                            <p class="lead">Nous vous accompagnons dans la planification et l'organisation d'événements, en offrant des services sur mesure pour maximiser leur impact.</p>
+                            
+                            <h4 class="mt-4 mb-3">Services Complémentaires</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li><strong>Planification Stratégique d'Événements</strong> : Élaboration d'une feuille de route complète pour chaque événement, incluant le budget, le calendrier, et la logistique.</li>
+                                        <li><strong>Coordination sur Site</strong> : Présence d'un manager d'événements sur place pour superviser l'ensemble des activités le jour J.</li>
+                                        <li><strong>Création d'Expériences Personnalisées</strong> : Conception d'événements sur mesure en fonction des besoins spécifiques.</li>
+                                        <li><strong>Gestion des Fournisseurs</strong> : Sélection et gestion des partenaires (traiteurs, décorateurs, techniciens).</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li><strong>Suivi Post-Événement</strong> : Évaluation de l'événement à travers des sondages et des retours d'expérience.</li>
+                                        <li><strong>Formation et Coaching</strong> : Sessions de formation pour les futures organisatrices d'événements.</li>
+                                        <li><strong>Communication et Promotion</strong> : Élaboration de stratégies de communication pour promouvoir les événements.</li>
+                                        <li><strong>Gestion de Crise</strong> : Mise en place de plans de contingence pour anticiper et gérer les imprévus.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <h4 class="mt-4 mb-3">Nos Services Incluent</h4>
+                            <ul>
+                                <li>Mise à disposition d'un studio photo et vidéo</li>
+                                <li>Couverture médiatique complète</li>
+                                <li>Conception de supports de communication</li>
+                            </ul>
+                            
+                            <h4 class="mt-4 mb-3">Types d'Événements</h4>
+                            <p>Conférences, ateliers, séminaires et retraites</p>
+                            
+                            <div class="mt-4">
+                                <a href="{% url 'events:liste_evenements' %}" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-calendar"></i> Voir les événements
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIKITA Academia -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-lg mb-4">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center mb-4 mb-md-0">
+                            <i class="fas fa-graduation-cap fa-5x text-primary"></i>
+                        </div>
+                        <div class="col-md-10">
+                            <h2 class="mb-4">LIKITA Academia</h2>
+                            <p class="lead">Un centre de formation dédié au développement personnel et professionnel, où des sessions intensives de deux à trois jours sont proposées.</p>
+                            
+                            <h4 class="mt-4 mb-3">Thématiques Proposées</h4>
+                            <ul>
+                                <li>Leadership et développement des compétences managériales</li>
+                                <li>Équilibre entre vie professionnelle et vie personnelle</li>
+                                <li>Compétences en communication et relations interpersonnelles</li>
+                                <li>Innovation et créativité dans le milieu professionnel</li>
+                            </ul>
+                            
+                            <h4 class="mt-4 mb-3">Programmes de Formation</h4>
+                            <ul>
+                                <li><strong>Ateliers Pratiques</strong> : Sessions interactives animées par des experts dans leurs domaines</li>
+                                <li><strong>Conférences Inspirantes</strong> : Interventions de professionnels reconnus</li>
+                                <li><strong>Groupes de Discussion</strong> : Espaces de partage et d'échange d'idées</li>
+                            </ul>
+                            
+                            <h4 class="mt-4 mb-3">Format de la Formation</h4>
+                            <ul>
+                                <li><strong>Durée</strong> : Programmes de deux à trois jours</li>
+                                <li><strong>Flexibilité</strong> : Possibilité d'organiser des formations en présentiel ou en ligne</li>
+                            </ul>
+                            
+                            <h4 class="mt-4 mb-3">Accréditation et Certification</h4>
+                            <p>Remise de certificats de participation à la fin de chaque formation, valorisant l'engagement des participants.</p>
+                            
+                            <h4 class="mt-4 mb-3">Autres Services</h4>
+                            <ul>
+                                <li>Abonnements à des Programmes de Formation</li>
+                                <li>Consultations Individuelles (coaching ou mentorat)</li>
+                                <li>Partenariats et Sponsoring</li>
+                                <li>Vente de Matériel Pédagogique</li>
+                                <li>Événements Thématiques</li>
+                                <li>Certification Professionnelle</li>
+                                <li>Ressources en Ligne</li>
+                                <li>Retraites et Séminaires Résidentiels</li>
+                                <li>Webinaires et Formations en Ligne</li>
+                                <li>Événements de Réseautage Premium</li>
+                            </ul>
+                            
+                            <div class="mt-4">
+                                <a href="{% url 'academia:liste_formations' %}" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-graduation-cap"></i> Voir les formations
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forum Mwasi Mwinda -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-lg mb-4 bg-primary text-white">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center mb-4 mb-md-0">
+                            <i class="fas fa-users fa-5x text-white"></i>
+                        </div>
+                        <div class="col-md-10">
+                            <h2 class="mb-4 text-white">Forum Mwasi Mwinda</h2>
+                            <p class="lead">Un événement annuel qui célèbre les réalisations féminines et encourage le dialogue sur des sujets d'actualité.</p>
+                            
+                            <h4 class="mt-4 mb-3">Objectifs de l'Événement</h4>
+                            <ul>
+                                <li><strong>Célébration des Réalisations Féminines</strong> : Mettre en lumière les succès et contributions des femmes dans divers secteurs</li>
+                                <li><strong>Renforcement des Réseaux</strong> : Créer des opportunités de rencontre et de collaboration</li>
+                                <li><strong>Inspiration et Motivation</strong> : Offrir une plateforme pour partager des histoires inspirantes</li>
+                            </ul>
+                            
+                            <h4 class="mt-4 mb-3">Structure de l'Événement</h4>
+                            <ul>
+                                <li><strong>Programme de Conférences</strong> : Interventions d'experts et leaders d'opinion</li>
+                                <li><strong>Ateliers Pratiques</strong> : Sessions interactives sur des compétences clés</li>
+                                <li><strong>Expositions et Stands</strong> : Espace dédié aux entrepreneuses</li>
+                                <li><strong>Moments de Networking</strong> : Pauses café et activités de mise en réseau</li>
+                                <li><strong>Compétitions et Prix</strong> : Concours pour récompenser les meilleures initiatives</li>
+                                <li><strong>Panel de Discussions</strong> : Échanges sur des sujets d'actualité</li>
+                                <li><strong>Soirée de Gala et Remise de Prix</strong> : Célébration des réalisations</li>
+                            </ul>
+                            
+                            <h4 class="mt-4 mb-3">Pourquoi y participer ?</h4>
+                            <ul>
+                                <li>Des conférences inspirantes avec des experts et leaders d'opinion</li>
+                                <li>Des ateliers pratiques pour renforcer les compétences des participants</li>
+                                <li>Des opportunités de networking et d'échange d'expériences</li>
+                                <li>Une exposition mettant en avant des projets et initiatives innovantes</li>
+                            </ul>
+                            
+                            <div class="mt-4">
+                                <a href="{% url 'events:liste_evenements' %}?type=forum" class="btn btn-light btn-lg">
+                                    <i class="fas fa-users"></i> En savoir plus sur le Forum
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Final -->
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <div class="card border-0 shadow-lg bg-beige">
+                <div class="card-body p-5">
+                    <h2 class="mb-4">Avec LIKITA Group, nous bâtissons un monde où chaque voix compte</h2>
+                    <p class="lead mb-4">La communication devient un véritable levier de transformation.</p>
+                    <div class="mb-4">
+                        <a href="https://linktr.ee/likitagroup" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg me-3 mb-2">
+                            <i class="fas fa-link"></i> Retrouvez-nous sur Linktree
+                        </a>
+                        <a href="{% url 'core:contact' %}" class="btn btn-outline-primary btn-lg me-3 mb-2">
+                            <i class="fas fa-envelope"></i> Nous Contacter
+                        </a>
+                        <a href="{% url 'core:about' %}" class="btn btn-outline-primary btn-lg mb-2">
+                            <i class="fas fa-info-circle"></i> En savoir plus
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

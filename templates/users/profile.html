@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="display-5 mb-4">Mon Profil</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    {% if user.profil.photo %}
+                    <img src="{{ user.profil.photo.url }}" alt="{{ user.username }}" class="img-fluid rounded-circle mb-3" style="width: 200px; height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 200px; height: 200px;">
+                        <i class="fas fa-user fa-5x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <h4>{{ user.get_full_name|default:user.username }}</h4>
+                    <p class="text-muted">{{ user.email }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="mb-4">Informations personnelles</h5>
+                    <table class="table">
+                        <tr>
+                            <th>Nom d'utilisateur</th>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ user.email|default:"Non renseigné" }}</td>
+                        </tr>
+                        {% if user.profil.telephone %}
+                        <tr>
+                            <th>Téléphone</th>
+                            <td>{{ user.profil.telephone }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if user.profil.profession %}
+                        <tr>
+                            <th>Profession</th>
+                            <td>{{ user.profil.profession }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if user.profil.date_naissance %}
+                        <tr>
+                            <th>Date de naissance</th>
+                            <td>{{ user.profil.date_naissance|date:"d F Y" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if user.profil.adresse %}
+                        <tr>
+                            <th>Adresse</th>
+                            <td>{{ user.profil.adresse }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if user.profil.bio %}
+                        <tr>
+                            <th>Biographie</th>
+                            <td>{{ user.profil.bio }}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body">
+                    <h5 class="mb-4">Actions rapides</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'events:mes_inscriptions' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-calendar"></i> Mes Inscriptions
+                        </a>
+                        <a href="{% url 'academia:mes_formations' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-graduation-cap"></i> Mes Formations
+                        </a>
+                        <a href="{% url 'users:password_change' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-key"></i> Changer mon mot de passe
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

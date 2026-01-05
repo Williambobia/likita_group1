@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ article.titre }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'blog:liste_articles' %}">Blog</a></li>
+            <li class="breadcrumb-item active">{{ article.titre }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            {% if article.image_principale %}
+            <img src="{{ article.image_principale.url }}" class="img-fluid rounded mb-4" alt="{{ article.titre }}">
+            {% endif %}
+
+            <div class="mb-3">
+                {% if article.categorie %}
+                <span class="badge" style="background-color: {{ article.categorie.couleur }};">{{ article.categorie.nom }}</span>
+                {% endif %}
+                <span class="badge bg-secondary">
+                    <i class="fas fa-eye"></i> {{ article.vues }} vues
+                </span>
+            </div>
+
+            <h1 class="display-5 mb-4">{{ article.titre }}</h1>
+
+            <div class="mb-4 text-muted">
+                {% if article.auteur %}
+                <i class="fas fa-user"></i> Par {{ article.auteur.get_full_name|default:article.auteur.username }}
+                {% endif %}
+                <span class="ms-3">
+                    <i class="fas fa-calendar"></i> {{ article.date_publication|date:"d F Y"|default:article.date_creation|date:"d F Y" }}
+                </span>
+            </div>
+
+            <div class="mb-4">
+                <p class="lead">{{ article.description_courte }}</p>
+            </div>
+
+            <div class="article-content mb-5">
+                {{ article.contenu|linebreaks }}
+            </div>
+
+            {% load custom_filters %}
+            {% if article.tags %}
+            <div class="mb-4">
+                <h5>Tags</h5>
+                {% for tag in article.tags|split:"," %}
+                <span class="badge bg-light text-dark me-1">{{ tag|trim }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Commentaires -->
+            <div class="mt-5">
+                <h3>Commentaires ({{ commentaires.count }})</h3>
+                
+                {% if commentaires %}
+                <div class="mt-4">
+                    {% for commentaire in commentaires %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <strong>{{ commentaire.auteur.get_full_name|default:commentaire.auteur.username }}</strong>
+                                    <small class="text-muted ms-2">{{ commentaire.date_creation|date:"d F Y à H:i" }}</small>
+                                </div>
+                            </div>
+                            <p class="mb-0">{{ commentaire.contenu|linebreaks }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">Aucun commentaire pour le moment.</p>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                <div class="mt-4">
+                    <h5>Ajouter un commentaire</h5>
+                    <form method="post" action="{% url 'blog:ajouter_commentaire' article.slug %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <textarea name="contenu" class="form-control" rows="4" placeholder="Votre commentaire..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Publier le commentaire</button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="alert alert-info mt-4">
+                    <i class="fas fa-info-circle"></i> <a href="{% url 'users:login' %}">Connectez-vous</a> pour ajouter un commentaire.
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Articles similaires -->
+            {% if articles_similaires %}
+            <div class="mt-5">
+                <h3>Articles similaires</h3>
+                <div class="row">
+                    {% for article_sim in articles_similaires %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            {% if article_sim.image_principale %}
+                            <img src="{{ article_sim.image_principale.url }}" class="card-img-top" alt="{{ article_sim.titre }}" style="height: 150px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h6 class="card-title">{{ article_sim.titre }}</h6>
+                                <a href="{% url 'blog:detail_article' article_sim.slug %}" class="btn btn-sm btn-outline-primary">Lire</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-body">
+                    <h5>Informations</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-user text-primary"></i> 
+                            <strong>Auteur:</strong><br>
+                            {{ article.auteur.get_full_name|default:article.auteur.username|default:"Anonyme" }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-calendar text-primary"></i> 
+                            <strong>Date:</strong><br>
+                            {{ article.date_publication|date:"d F Y"|default:article.date_creation|date:"d F Y" }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-eye text-primary"></i> 
+                            <strong>Vues:</strong> {{ article.vues }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

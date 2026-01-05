@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog - LIKITA Group{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4 mb-3">Blog</h1>
+            <p class="lead">Actualités et articles de LIKITA Group</p>
+        </div>
+    </div>
+
+    <!-- Recherche et filtres -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Rechercher</label>
+                            <input type="text" name="q" class="form-control" placeholder="Rechercher un article..." value="{{ recherche }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Catégorie</label>
+                            <select name="categorie" class="form-select">
+                                <option value="">Toutes les catégories</option>
+                                {% for cat in categories %}
+                                <option value="{{ cat.slug }}" {% if categorie_active and categorie_active.slug == cat.slug %}selected{% endif %}>{{ cat.nom }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Rechercher</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if articles %}
+    <div class="row">
+        {% for article in articles %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                {% if article.image_principale %}
+                <img src="{{ article.image_principale.url }}" class="card-img-top" alt="{{ article.titre }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-newspaper fa-4x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    {% if article.categorie %}
+                    <span class="badge" style="background-color: {{ article.categorie.couleur }};">{{ article.categorie.nom }}</span>
+                    {% endif %}
+                    <h5 class="card-title mt-2">{{ article.titre }}</h5>
+                    <p class="card-text text-muted small">
+                        {% if article.auteur %}
+                        <i class="fas fa-user"></i> {{ article.auteur.get_full_name|default:article.auteur.username }}
+                        {% endif %}
+                        <br><i class="fas fa-calendar"></i> {{ article.date_publication|date:"d F Y"|default:article.date_creation|date:"d F Y" }}
+                        <br><i class="fas fa-eye"></i> {{ article.vues }} vues
+                    </p>
+                    <p class="card-text">{{ article.description_courte|truncatewords:20 }}</p>
+                    <a href="{% url 'blog:detail_article' article.slug %}" class="btn btn-primary btn-sm">Lire la suite</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <h4>Aucun article disponible</h4>
+        <p>Les articles seront bientôt disponibles.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+

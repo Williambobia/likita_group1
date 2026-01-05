@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ emission.titre }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'media_app:liste_emissions' %}">Émissions</a></li>
+                    <li class="breadcrumb-item active">{{ emission.titre }}</li>
+                </ol>
+            </nav>
+
+            <h1 class="display-5 mb-4">{{ emission.titre }}</h1>
+            
+            <div class="mb-4">
+                <span class="badge bg-secondary me-2">
+                    <i class="fas fa-calendar"></i> {{ emission.date_diffusion|date:"d F Y" }}
+                </span>
+                {% if emission.invite %}
+                <span class="badge bg-info me-2">
+                    <i class="fas fa-user"></i> {{ emission.invite }}
+                </span>
+                {% endif %}
+                {% if emission.duree %}
+                <span class="badge bg-success me-2">
+                    <i class="fas fa-clock"></i> {{ emission.duree }}
+                </span>
+                {% endif %}
+                <span class="badge bg-primary">
+                    <i class="fas fa-eye"></i> {{ emission.vues }} vues
+                </span>
+            </div>
+
+            <!-- Vidéo -->
+            {% if emission.video_url %}
+            <div class="mb-4">
+                <div class="ratio ratio-16x9">
+                    <iframe src="{{ emission.video_url }}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            {% elif emission.video %}
+            <div class="mb-4">
+                <video controls class="w-100" style="max-height: 500px;">
+                    <source src="{{ emission.video.url }}" type="video/mp4">
+                    Votre navigateur ne supporte pas la lecture de vidéos.
+                </video>
+            </div>
+            {% endif %}
+
+            <div class="mb-4">
+                <h3>Description</h3>
+                <p>{{ emission.description|linebreaks }}</p>
+            </div>
+
+            {% load custom_filters %}
+            {% if emission.tags %}
+            <div class="mb-4">
+                <h5>Tags</h5>
+                {% for tag in emission.tags|split:"," %}
+                <span class="badge bg-light text-dark me-1">{{ tag|trim }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Articles liés -->
+            {% if articles %}
+            <div class="mt-5">
+                <h3>Articles liés</h3>
+                <div class="row">
+                    {% for article in articles %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            {% if article.image %}
+                            <img src="{{ article.image.url }}" class="card-img-top" alt="{{ article.titre }}" style="height: 150px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ article.titre }}</h5>
+                                <p class="card-text small">{{ article.contenu|truncatewords:15 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5>Informations</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-calendar text-primary"></i> <strong>Date:</strong> {{ emission.date_diffusion|date:"d F Y" }}</li>
+                        {% if emission.invite %}
+                        <li class="mb-2"><i class="fas fa-user text-primary"></i> <strong>Invité(e):</strong> {{ emission.invite }}</li>
+                        {% endif %}
+                        {% if emission.duree %}
+                        <li class="mb-2"><i class="fas fa-clock text-primary"></i> <strong>Durée:</strong> {{ emission.duree }}</li>
+                        {% endif %}
+                        <li class="mb-2"><i class="fas fa-eye text-primary"></i> <strong>Vues:</strong> {{ emission.vues }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

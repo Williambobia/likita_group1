@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Galerie d'Activités - LIKITA Group{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section mb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold text-white mb-3">Galerie d'Activités</h1>
+                <p class="lead text-white">Découvrez nos événements, conférences, panels de discussion et moments forts de LIKITA Group</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Statistiques -->
+    <div class="row mb-5">
+        <div class="col-md-4 text-center mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <i class="fas fa-images fa-3x text-primary mb-3"></i>
+                    <h3 class="mb-2">{{ total_images }}</h3>
+                    <p class="text-muted mb-0">Photos d'activités</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <i class="fas fa-calendar-alt fa-3x text-primary mb-3"></i>
+                    <h3 class="mb-2">{{ evenements_avec_galerie|length }}</h3>
+                    <p class="text-muted mb-0">Événements documentés</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                    <h3 class="mb-2">100+</h3>
+                    <p class="text-muted mb-0">Participants</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center gap-3">
+                        <button class="btn btn-outline-primary filter-btn active" data-filter="all">
+                            <i class="fas fa-th"></i> Toutes les photos
+                        </button>
+                        {% for evenement_id, data in evenements_avec_galerie.items %}
+                        <button class="btn btn-outline-primary filter-btn" data-filter="event-{{ evenement_id }}">
+                            <i class="fas fa-calendar"></i> {{ data.evenement.titre|truncatewords:3 }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Galerie par événement -->
+    {% if evenements_avec_galerie %}
+    {% for evenement_id, data in evenements_avec_galerie.items %}
+    <div class="row mb-5 event-gallery-section" data-event-id="{{ evenement_id }}">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h3 class="mb-0">
+                                <i class="fas fa-calendar-check"></i> {{ data.evenement.titre }}
+                            </h3>
+                            <p class="mb-0 mt-2">
+                                <i class="fas fa-map-marker-alt"></i> {{ data.evenement.lieu }}
+                                {% if data.evenement.date_debut %}
+                                | <i class="fas fa-clock"></i> {{ data.evenement.date_debut|date:"d F Y" }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <span class="badge bg-light text-dark fs-6">
+                                {{ data.images|length }} photo{{ data.images|length|pluralize }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        {% for item in data.images %}
+                        <div class="col-md-4 col-lg-3 gallery-item" data-event-id="{{ evenement_id }}">
+                            <div class="card border-0 shadow-sm h-100 gallery-card">
+                                <div class="gallery-image-wrapper">
+                                    <img src="{{ item.image.url }}" 
+                                         alt="{{ item.titre|default:data.evenement.titre }}" 
+                                         class="card-img-top gallery-image"
+                                         style="height: 250px; object-fit: cover; cursor: pointer;"
+                                         data-bs-toggle="modal" 
+                                         data-bs-target="#imageModal{{ item.id }}">
+                                    <div class="gallery-overlay">
+                                        <i class="fas fa-search-plus fa-2x text-white"></i>
+                                    </div>
+                                </div>
+                                {% if item.titre %}
+                                <div class="card-body p-2">
+                                    <p class="card-text small mb-0">{{ item.titre }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle fa-3x mb-3"></i>
+                <h4>Aucune photo disponible pour le moment</h4>
+                <p>Les photos d'activités seront bientôt ajoutées.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Vue mosaïque (toutes les photos) -->
+    <div class="row mb-5" id="mosaic-view" style="display: none;">
+        <div class="col-12">
+            <h2 class="mb-4 text-center">Toutes les Photos</h2>
+            <div class="row g-3">
+                {% for item in toutes_images %}
+                <div class="col-md-3 col-lg-2 gallery-item-mosaic">
+                    <div class="card border-0 shadow-sm gallery-card">
+                        <div class="gallery-image-wrapper">
+                            <img src="{{ item.image.url }}" 
+                                 alt="{{ item.titre|default:item.evenement.titre }}" 
+                                 class="card-img-top gallery-image"
+                                 style="height: 200px; object-fit: cover; cursor: pointer;"
+                                 data-bs-toggle="modal" 
+                                 data-bs-target="#imageModal{{ item.id }}">
+                            <div class="gallery-overlay">
+                                <i class="fas fa-search-plus fa-2x text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals pour chaque image -->
+{% for item in toutes_images %}
+<div class="modal fade" id="imageModal{{ item.id }}" tabindex="-1" aria-labelledby="imageModalLabel{{ item.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel{{ item.id }}">
+                    {{ item.titre|default:item.evenement.titre }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <img src="{{ item.image.url }}" alt="{{ item.titre|default:item.evenement.titre }}" class="img-fluid w-100">
+            </div>
+            <div class="modal-footer">
+                <p class="mb-0 text-muted">
+                    <i class="fas fa-calendar"></i> {{ item.evenement.titre }}
+                    {% if item.evenement.date_debut %}
+                    | <i class="fas fa-clock"></i> {{ item.evenement.date_debut|date:"d F Y" }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<style>
+.gallery-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+}
+
+.gallery-image {
+    transition: transform 0.3s ease;
+}
+
+.gallery-image:hover {
+    transform: scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-card:hover .gallery-overlay {
+    opacity: 1;
+}
+
+.gallery-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.filter-btn.active {
+    background-color: var(--likita-yellow);
+    border-color: var(--likita-yellow);
+    color: var(--likita-brown);
+}
+
+.event-gallery-section {
+    transition: opacity 0.3s ease;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const gallerySections = document.querySelectorAll('.event-gallery-section');
+    const mosaicView = document.getElementById('mosaic-view');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const galleryItemsMosaic = document.querySelectorAll('.gallery-item-mosaic');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            
+            // Mettre à jour les boutons actifs
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            if (filter === 'all') {
+                // Afficher toutes les sections
+                gallerySections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                mosaicView.style.display = 'none';
+            } else {
+                // Masquer toutes les sections
+                gallerySections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                mosaicView.style.display = 'none';
+                
+                // Afficher la section correspondante
+                const eventId = filter.replace('event-', '');
+                const targetSection = document.querySelector(`[data-event-id="${eventId}"]`);
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+

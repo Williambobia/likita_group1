@@ -1,0 +1,52 @@
+{% extends "admin/index.html" %}
+{% load static %}
+
+{% block content %}
+{{ block.super }}
+<div style="margin-top: 30px; padding: 20px; background: #F8E6B0; border-radius: 10px; border-left: 5px solid #F2B705;">
+    <h3 style="color: #3A2A1A; font-family: 'Montserrat', 'Poppins', sans-serif; font-weight: 700; margin-bottom: 15px;">
+        <i class="fas fa-info-circle"></i> Bienvenue dans l'administration LIKITA Group
+    </h3>
+    <p style="color: #3A2A1A; font-family: 'Open Sans', 'Roboto', sans-serif; line-height: 1.8;">
+        Gérez facilement tous les contenus de votre site : événements, formations, articles de blog, émissions, et bien plus encore.
+    </p>
+    <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="{% url 'core:home' %}" style="display: inline-block; background: #F2B705; color: #3A2A1A; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s ease;">
+            <i class="fas fa-home"></i> Retour au site
+        </a>
+        <a href="{% url 'admin:galerie_images' %}" style="display: inline-block; background: #3A2A1A; color: #F2B705; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s ease;">
+            <i class="fas fa-images"></i> Galerie d'Images
+        </a>
+    </div>
+    
+    <div style="margin-top: 30px; padding: 20px; background: #FFFFFF; border-radius: 10px; border-left: 5px solid #F2B705;">
+        <h4 style="color: #3A2A1A; font-family: 'Montserrat', 'Poppins', sans-serif; font-weight: 700; margin-bottom: 15px;">
+            <i class="fas fa-edit"></i> Gérer les Images
+        </h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <a href="{% url 'admin:core_logo_add' %}" style="display: block; padding: 15px; background: #F2B705; border-radius: 8px; text-decoration: none; color: #3A2A1A; font-weight: 700; transition: all 0.3s ease; border: 2px solid #D9A004;">
+                <i class="fas fa-image"></i> Ajouter Logo
+            </a>
+            <a href="{% url 'admin:core_membre_add' %}" style="display: block; padding: 15px; background: #F8E6B0; border-radius: 8px; text-decoration: none; color: #3A2A1A; font-weight: 600; transition: all 0.3s ease;">
+                <i class="fas fa-user-plus"></i> Ajouter Membre
+            </a>
+            <a href="{% url 'admin:events_evenement_add' %}" style="display: block; padding: 15px; background: #F8E6B0; border-radius: 8px; text-decoration: none; color: #3A2A1A; font-weight: 600; transition: all 0.3s ease;">
+                <i class="fas fa-calendar-plus"></i> Ajouter Événement
+            </a>
+            <a href="{% url 'admin:events_galerieevenement_add' %}" style="display: block; padding: 15px; background: #F8E6B0; border-radius: 8px; text-decoration: none; color: #3A2A1A; font-weight: 600; transition: all 0.3s ease;">
+                <i class="fas fa-photo-video"></i> Ajouter Image Galerie
+            </a>
+            <a href="{% url 'admin:academia_formation_add' %}" style="display: block; padding: 15px; background: #F8E6B0; border-radius: 8px; text-decoration: none; color: #3A2A1A; font-weight: 600; transition: all 0.3s ease;">
+                <i class="fas fa-graduation-cap"></i> Ajouter Formation
+            </a>
+            <a href="{% url 'admin:media_app_emission_add' %}" style="display: block; padding: 15px; background: #F8E6B0; border-radius: 8px; text-decoration: none; color: #3A2A1A; font-weight: 600; transition: all 0.3s ease;">
+                <i class="fas fa-video"></i> Ajouter Émission
+            </a>
+            <a href="{% url 'admin:blog_article_add' %}" style="display: block; padding: 15px; background: #F8E6B0; border-radius: 8px; text-decoration: none; color: #3A2A1A; font-weight: 600; transition: all 0.3s ease;">
+                <i class="fas fa-blog"></i> Ajouter Article
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

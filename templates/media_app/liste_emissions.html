@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Émissions LIKITA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4 mb-3">Émissions LIKITA</h1>
+            <p class="lead">Découvrez nos émissions et contenus médiatiques inspirants</p>
+        </div>
+    </div>
+
+    {% if emissions %}
+    <div class="row">
+        {% for emission in emissions %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                {% if emission.image_thumbnail %}
+                <img src="{{ emission.image_thumbnail.url }}" class="card-img-top" alt="{{ emission.titre }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-video fa-4x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ emission.titre }}</h5>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-calendar"></i> {{ emission.date_diffusion|date:"d F Y" }}
+                        {% if emission.invite %}
+                        <br><i class="fas fa-user"></i> Invité(e): {{ emission.invite }}
+                        {% endif %}
+                        {% if emission.duree %}
+                        <br><i class="fas fa-clock"></i> {{ emission.duree }}
+                        {% endif %}
+                        <br><i class="fas fa-eye"></i> {{ emission.vues }} vues
+                    </p>
+                    <p class="card-text">{{ emission.description|truncatewords:20 }}</p>
+                    <a href="{% url 'media_app:detail_emission' emission.slug %}" class="btn btn-primary">Voir l'émission</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <h4>Aucune émission disponible</h4>
+        <p>Les émissions seront bientôt disponibles.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+

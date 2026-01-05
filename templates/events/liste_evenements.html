@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Événements LIKITA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4 mb-3">Événements LIKITA</h1>
+            <p class="lead">Découvrez nos événements et conférences</p>
+        </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Type d'événement</label>
+                            <select name="type" class="form-select">
+                                <option value="">Tous les types</option>
+                                <option value="forum" {% if type_filter == 'forum' %}selected{% endif %}>Forum Mwasi Mwinda</option>
+                                <option value="conference" {% if type_filter == 'conference' %}selected{% endif %}>Conférence</option>
+                                <option value="atelier" {% if type_filter == 'atelier' %}selected{% endif %}>Atelier</option>
+                                <option value="seminaire" {% if type_filter == 'seminaire' %}selected{% endif %}>Séminaire</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <a href="{% url 'events:liste_evenements' %}" class="btn btn-outline-secondary w-100">Réinitialiser</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Événements à venir -->
+    {% if evenements_a_venir %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Événements à venir</h2>
+            <div class="row">
+                {% for evenement in evenements_a_venir %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        {% if evenement.image %}
+                        <img src="{{ evenement.image.url }}" class="card-img-top" alt="{{ evenement.titre }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-calendar-alt fa-4x text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2">{{ evenement.get_type_evenement_display }}</span>
+                            <h5 class="card-title">{{ evenement.titre }}</h5>
+                            <p class="card-text text-muted small">
+                                <i class="fas fa-calendar"></i> {{ evenement.date_debut|date:"d F Y à H:i" }}<br>
+                                <i class="fas fa-map-marker-alt"></i> {{ evenement.lieu }}
+                            </p>
+                            {% if evenement.description_courte %}
+                            <p class="card-text">{{ evenement.description_courte|truncatewords:20 }}</p>
+                            {% else %}
+                            <p class="card-text">{{ evenement.description|truncatewords:20 }}</p>
+                            {% endif %}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{% url 'events:detail_evenement' evenement.slug %}" class="btn btn-primary btn-sm">Détails</a>
+                                {% if evenement.prix > 0 %}
+                                <span class="badge bg-success">{{ evenement.prix|floatformat:0 }} FC</span>
+                                {% else %}
+                                <span class="badge bg-success">Gratuit</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Événements passés -->
+    {% if evenements_passes %}
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Événements passés</h2>
+            <div class="row">
+                {% for evenement in evenements_passes %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm opacity-75">
+                        {% if evenement.image %}
+                        <img src="{{ evenement.image.url }}" class="card-img-top" alt="{{ evenement.titre }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-calendar-alt fa-4x text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <span class="badge bg-secondary mb-2">{{ evenement.get_type_evenement_display }}</span>
+                            <h5 class="card-title">{{ evenement.titre }}</h5>
+                            <p class="card-text text-muted small">
+                                <i class="fas fa-calendar"></i> {{ evenement.date_debut|date:"d F Y" }}<br>
+                                <i class="fas fa-map-marker-alt"></i> {{ evenement.lieu }}
+                            </p>
+                            <a href="{% url 'events:detail_evenement' evenement.slug %}" class="btn btn-outline-primary btn-sm">Voir les détails</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if not evenements_a_venir and not evenements_passes %}
+    <div class="alert alert-info">
+        <h4>Aucun événement disponible</h4>
+        <p>Les événements seront bientôt disponibles.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+

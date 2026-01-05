@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vision, Mission et Valeurs - LIKITA Group{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 mb-4">Vision, Mission et Valeurs</h1>
+            <p class="lead">Les fondements de LIKITA Group</p>
+        </div>
+    </div>
+
+    <!-- Vision -->
+    {% if vision %}
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-eye fa-4x text-primary"></i>
+                    </div>
+                    <h2 class="text-center mb-4">Notre Vision</h2>
+                    <p class="lead text-center">{{ vision.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Mission -->
+    {% if mission %}
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-bullseye fa-4x text-primary"></i>
+                    </div>
+                    <h2 class="text-center mb-4">Notre Mission</h2>
+                    <p class="lead text-center">{{ mission.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Valeurs -->
+    {% if valeurs %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-5">Nos Valeurs</h2>
+            <div class="row">
+                {% for valeur in valeurs %}
+                {% if valeur.ordre_affichage <= 4 %}
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 border-0 shadow-sm text-center">
+                        <div class="card-body p-4">
+                            {% if valeur.icone %}
+                            <i class="{{ valeur.icone }} fa-4x text-primary mb-3"></i>
+                            {% else %}
+                            <i class="fas fa-heart fa-4x text-primary mb-3"></i>
+                            {% endif %}
+                            <h3 class="mb-3">{{ valeur.titre }}</h3>
+                            <p>{{ valeur.description }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Objectifs -->
+    {% if valeurs %}
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-5">Nos Objectifs</h2>
+            <div class="row">
+                {% for valeur in valeurs %}
+                {% if valeur.ordre_affichage > 4 %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-start">
+                                {% if valeur.icone %}
+                                <i class="{{ valeur.icone }} fa-2x text-primary me-3 mt-1"></i>
+                                {% else %}
+                                <i class="fas fa-check-circle fa-2x text-primary me-3 mt-1"></i>
+                                {% endif %}
+                                <div>
+                                    <h3 class="mb-3">{{ valeur.titre }}</h3>
+                                    <p class="mb-0">{{ valeur.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+

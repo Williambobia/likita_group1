@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ formation.titre }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'academia:liste_formations' %}">Formations</a></li>
+            <li class="breadcrumb-item active">{{ formation.titre }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            {% if formation.image %}
+            <img src="{{ formation.image.url }}" class="img-fluid rounded mb-4" alt="{{ formation.titre }}">
+            {% endif %}
+
+            <div class="mb-3">
+                <span class="badge bg-primary fs-6">{{ formation.get_type_formation_display }}</span>
+                <span class="badge bg-info fs-6">{{ formation.get_niveau_display }}</span>
+                {% if formation.certificat %}
+                <span class="badge bg-success fs-6"><i class="fas fa-certificate"></i> Certificat délivré</span>
+                {% endif %}
+            </div>
+
+            <h1 class="display-5 mb-4">{{ formation.titre }}</h1>
+
+            <div class="mb-4">
+                <h3>Description</h3>
+                <p>{{ formation.description|linebreaks }}</p>
+            </div>
+
+            <div class="mb-4">
+                <h3>Thème</h3>
+                <p class="lead">{{ formation.theme }}</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Informations</h5>
+                    
+                    <div class="mb-3">
+                        <i class="fas fa-book text-primary"></i> <strong>Thème:</strong><br>
+                        {{ formation.theme }}
+                    </div>
+
+                    <div class="mb-3">
+                        <i class="fas fa-clock text-primary"></i> <strong>Durée:</strong><br>
+                        {{ formation.duree }}
+                    </div>
+
+                    {% if formation.date_debut %}
+                    <div class="mb-3">
+                        <i class="fas fa-calendar text-primary"></i> <strong>Date de début:</strong><br>
+                        {{ formation.date_debut|date:"d F Y" }}
+                    </div>
+                    {% endif %}
+
+                    {% if formation.date_fin %}
+                    <div class="mb-3">
+                        <i class="fas fa-calendar-check text-primary"></i> <strong>Date de fin:</strong><br>
+                        {{ formation.date_fin|date:"d F Y" }}
+                    </div>
+                    {% endif %}
+
+                    {% if formation.formateur %}
+                    <div class="mb-3">
+                        <i class="fas fa-chalkboard-teacher text-primary"></i> <strong>Formateur:</strong><br>
+                        {{ formation.formateur }}
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <i class="fas fa-tag text-primary"></i> <strong>Prix:</strong><br>
+                        {% if formation.prix > 0 %}
+                        {{ formation.prix|floatformat:0 }} FC
+                        {% else %}
+                        <span class="badge bg-success">Gratuit</span>
+                        {% endif %}
+                    </div>
+
+                    {% if formation.places_disponibles > 0 %}
+                    <div class="mb-3">
+                        <i class="fas fa-users text-primary"></i> <strong>Places:</strong><br>
+                        {{ formation.places_restantes }} places disponibles sur {{ formation.places_disponibles }}
+                    </div>
+                    {% endif %}
+
+                    <hr>
+
+                    {% if user.is_authenticated %}
+                        {% if deja_inscrit %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> Vous êtes inscrit à cette formation
+                        </div>
+                        {% if certificat %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-certificate"></i> Certificat disponible
+                        </div>
+                        <a href="{% url 'academia:telecharger_certificat' certificat.id %}" class="btn btn-success w-100 mb-2">
+                            <i class="fas fa-download"></i> Télécharger le certificat
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'academia:mes_formations' %}" class="btn btn-outline-primary w-100">Voir mes formations</a>
+                        {% elif formation.est_complet %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i> Cette formation est complète
+                        </div>
+                        {% else %}
+                        <form method="post" action="{% url 'academia:inscription_formation' formation.slug %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-user-plus"></i> S'inscrire
+                            </button>
+                        </form>
+                        {% endif %}
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Connectez-vous pour vous inscrire
+                    </div>
+                    <a href="{% url 'users:login' %}" class="btn btn-primary w-100">Se connecter</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

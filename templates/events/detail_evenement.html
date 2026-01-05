@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ evenement.titre }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'events:liste_evenements' %}">Événements</a></li>
+            <li class="breadcrumb-item active">{{ evenement.titre }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            {% if evenement.image %}
+            <img src="{{ evenement.image.url }}" class="img-fluid rounded mb-4" alt="{{ evenement.titre }}">
+            {% endif %}
+
+            <div class="mb-3">
+                <span class="badge bg-primary fs-6">{{ evenement.get_type_evenement_display }}</span>
+                <span class="badge bg-{{ evenement.statut|yesno:'success,secondary' }} fs-6">{{ evenement.get_statut_display }}</span>
+            </div>
+
+            <h1 class="display-5 mb-4">{{ evenement.titre }}</h1>
+
+            <div class="mb-4">
+                <h3>Description</h3>
+                <p>{{ evenement.description|linebreaks }}</p>
+            </div>
+
+            <!-- Galerie -->
+            {% if galerie %}
+            <div class="mb-4">
+                <h3>Galerie</h3>
+                <div class="row">
+                    {% for media in galerie %}
+                    <div class="col-md-4 mb-3">
+                        {% if media.image %}
+                        <img src="{{ media.image.url }}" class="img-fluid rounded" alt="{{ media.titre }}">
+                        {% elif media.video_url %}
+                        <div class="ratio ratio-16x9">
+                            <iframe src="{{ media.video_url }}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        {% elif media.video %}
+                        <video controls class="w-100">
+                            <source src="{{ media.video.url }}" type="video/mp4">
+                        </video>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Informations</h5>
+                    
+                    <div class="mb-3">
+                        <i class="fas fa-calendar text-primary"></i> <strong>Date de début:</strong><br>
+                        {{ evenement.date_debut|date:"d F Y à H:i" }}
+                    </div>
+
+                    {% if evenement.date_fin %}
+                    <div class="mb-3">
+                        <i class="fas fa-calendar-check text-primary"></i> <strong>Date de fin:</strong><br>
+                        {{ evenement.date_fin|date:"d F Y à H:i" }}
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <i class="fas fa-map-marker-alt text-primary"></i> <strong>Lieu:</strong><br>
+                        {{ evenement.lieu }}
+                        {% if evenement.adresse_complete %}
+                        <br><small class="text-muted">{{ evenement.adresse_complete }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <i class="fas fa-tag text-primary"></i> <strong>Prix:</strong><br>
+                        {% if evenement.prix > 0 %}
+                        {{ evenement.prix|floatformat:0 }} FC
+                        {% else %}
+                        <span class="badge bg-success">Gratuit</span>
+                        {% endif %}
+                    </div>
+
+                    {% if evenement.places_disponibles > 0 %}
+                    <div class="mb-3">
+                        <i class="fas fa-users text-primary"></i> <strong>Places:</strong><br>
+                        {{ evenement.places_restantes }} places disponibles sur {{ evenement.places_disponibles }}
+                    </div>
+                    {% endif %}
+
+                    <hr>
+
+                    {% if user.is_authenticated %}
+                        {% if deja_inscrit %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> Vous êtes inscrit à cet événement
+                        </div>
+                        <a href="{% url 'events:mes_inscriptions' %}" class="btn btn-outline-primary w-100">Voir mes inscriptions</a>
+                        {% elif evenement.est_complet %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i> Cet événement est complet
+                        </div>
+                        {% else %}
+                        <form method="post" action="{% url 'events:inscription_evenement' evenement.slug %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-user-plus"></i> S'inscrire
+                            </button>
+                        </form>
+                        {% endif %}
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Connectez-vous pour vous inscrire
+                    </div>
+                    <a href="{% url 'users:login' %}" class="btn btn-primary w-100">Se connecter</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

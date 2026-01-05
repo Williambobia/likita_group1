@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Galerie d'Images - LIKITA Group{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="hero-section mb-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold text-white mb-3">Galerie d'Images</h1>
+                    <p class="lead text-white">Découvrez toutes les images de LIKITA Group : logos, équipe, événements, formations, émissions et articles.</p>
+                    <p class="text-white"><strong>{{ total_images }} image(s)</strong> au total</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fas fa-images fa-5x text-white opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtres par catégorie -->
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Filtres de galerie">
+            <button type="button" class="btn btn-outline-primary filter-btn active" data-filter="all">
+                <i class="fas fa-th"></i> Toutes
+            </button>
+            {% if images_data.logos %}
+            <button type="button" class="btn btn-outline-primary filter-btn" data-filter="logos">
+                <i class="fas fa-image"></i> Logos ({{ images_data.logos|length }})
+            </button>
+            {% endif %}
+            {% if images_data.equipe %}
+            <button type="button" class="btn btn-outline-primary filter-btn" data-filter="equipe">
+                <i class="fas fa-users"></i> Équipe ({{ images_data.equipe|length }})
+            </button>
+            {% endif %}
+            {% if images_data.evenements %}
+            <button type="button" class="btn btn-outline-primary filter-btn" data-filter="evenements">
+                <i class="fas fa-calendar"></i> Événements ({{ images_data.evenements|length }})
+            </button>
+            {% endif %}
+            {% if images_data.galerie_evenements %}
+            <button type="button" class="btn btn-outline-primary filter-btn" data-filter="galerie_evenements">
+                <i class="fas fa-photo-video"></i> Galerie Événements ({{ images_data.galerie_evenements|length }})
+            </button>
+            {% endif %}
+            {% if images_data.formations %}
+            <button type="button" class="btn btn-outline-primary filter-btn" data-filter="formations">
+                <i class="fas fa-graduation-cap"></i> Formations ({{ images_data.formations|length }})
+            </button>
+            {% endif %}
+            {% if images_data.emissions %}
+            <button type="button" class="btn btn-outline-primary filter-btn" data-filter="emissions">
+                <i class="fas fa-video"></i> Émissions ({{ images_data.emissions|length }})
+            </button>
+            {% endif %}
+            {% if images_data.blog %}
+            <button type="button" class="btn btn-outline-primary filter-btn" data-filter="blog">
+                <i class="fas fa-blog"></i> Blog ({{ images_data.blog|length }})
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Galerie d'images -->
+    <div class="row g-4" id="galerie-container">
+        <!-- Logos -->
+        {% for image in images_data.logos %}
+        <div class="col-md-4 col-lg-3 galerie-item" data-category="logos">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-img-wrapper" style="height: 250px; overflow: hidden; background: var(--likita-beige); display: flex; align-items: center; justify-content: center;">
+                    <img src="{{ image.url }}" alt="{{ image.nom }}" class="card-img-top" style="max-height: 100%; width: auto; object-fit: contain;">
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title text-truncate">{{ image.nom }}</h6>
+                    <small class="text-muted"><i class="fas fa-tag"></i> {{ image.type }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Équipe -->
+        {% for image in images_data.equipe %}
+        <div class="col-md-4 col-lg-3 galerie-item" data-category="equipe">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-img-wrapper" style="height: 250px; overflow: hidden;">
+                    <img src="{{ image.url }}" alt="{{ image.nom }}" class="card-img-top" style="height: 100%; width: 100%; object-fit: cover;">
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title text-truncate">{{ image.nom }}</h6>
+                    <small class="text-muted"><i class="fas fa-users"></i> {{ image.type }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Événements -->
+        {% for image in images_data.evenements %}
+        <div class="col-md-4 col-lg-3 galerie-item" data-category="evenements">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-img-wrapper" style="height: 250px; overflow: hidden;">
+                    <img src="{{ image.url }}" alt="{{ image.nom }}" class="card-img-top" style="height: 100%; width: 100%; object-fit: cover;">
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title text-truncate">{{ image.nom }}</h6>
+                    <small class="text-muted"><i class="fas fa-calendar"></i> {{ image.type }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Galerie Événements -->
+        {% for image in images_data.galerie_evenements %}
+        <div class="col-md-4 col-lg-3 galerie-item" data-category="galerie_evenements">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-img-wrapper" style="height: 250px; overflow: hidden;">
+                    <img src="{{ image.url }}" alt="{{ image.nom }}" class="card-img-top" style="height: 100%; width: 100%; object-fit: cover;">
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title text-truncate">{{ image.nom }}</h6>
+                    <small class="text-muted"><i class="fas fa-photo-video"></i> {{ image.type }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Formations -->
+        {% for image in images_data.formations %}
+        <div class="col-md-4 col-lg-3 galerie-item" data-category="formations">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-img-wrapper" style="height: 250px; overflow: hidden;">
+                    <img src="{{ image.url }}" alt="{{ image.nom }}" class="card-img-top" style="height: 100%; width: 100%; object-fit: cover;">
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title text-truncate">{{ image.nom }}</h6>
+                    <small class="text-muted"><i class="fas fa-graduation-cap"></i> {{ image.type }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Émissions -->
+        {% for image in images_data.emissions %}
+        <div class="col-md-4 col-lg-3 galerie-item" data-category="emissions">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-img-wrapper" style="height: 250px; overflow: hidden;">
+                    <img src="{{ image.url }}" alt="{{ image.nom }}" class="card-img-top" style="height: 100%; width: 100%; object-fit: cover;">
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title text-truncate">{{ image.nom }}</h6>
+                    <small class="text-muted"><i class="fas fa-video"></i> {{ image.type }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Blog -->
+        {% for image in images_data.blog %}
+        <div class="col-md-4 col-lg-3 galerie-item" data-category="blog">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-img-wrapper" style="height: 250px; overflow: hidden;">
+                    <img src="{{ image.url }}" alt="{{ image.nom }}" class="card-img-top" style="height: 100%; width: 100%; object-fit: cover;">
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title text-truncate">{{ image.nom }}</h6>
+                    <small class="text-muted"><i class="fas fa-blog"></i> {{ image.type }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Message si aucune image -->
+    {% if total_images == 0 %}
+    <div class="text-center py-5">
+        <i class="fas fa-images fa-4x text-muted mb-3"></i>
+        <p class="text-muted">Aucune image disponible pour le moment.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modal pour afficher l'image en grand -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="" class="img-fluid">
+                <p id="modalImageTitle" class="mt-3 mb-0"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Filtrage par catégorie
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.galerie-item');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            
+            // Mettre à jour les boutons actifs
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filtrer les images
+            galleryItems.forEach(item => {
+                if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Ouvrir l'image en modal au clic
+    galleryItems.forEach(item => {
+        const img = item.querySelector('img');
+        const title = item.querySelector('.card-title').textContent;
+        
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', function() {
+            const modalImage = document.getElementById('modalImage');
+            const modalImageTitle = document.getElementById('modalImageTitle');
+            const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+            
+            modalImage.src = img.src;
+            modalImage.alt = title;
+            modalImageTitle.textContent = title;
+            modal.show();
+        });
+    });
+});
+</script>
+{% endblock %}
+

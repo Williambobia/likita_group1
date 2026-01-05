@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mes Formations{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="display-5 mb-4">Mes Formations</h1>
+
+    {% if inscriptions %}
+    <div class="row">
+        {% for inscription in inscriptions %}
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                {% if inscription.formation.image %}
+                <img src="{{ inscription.formation.image.url }}" class="card-img-top" alt="{{ inscription.formation.titre }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-graduation-cap fa-4x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <span class="badge bg-{{ inscription.statut|yesno:'success,warning,secondary,info' }} mb-2">
+                        {{ inscription.get_statut_display }}
+                    </span>
+                    <h5 class="card-title">{{ inscription.formation.titre }}</h5>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-book"></i> {{ inscription.formation.theme }}<br>
+                        <i class="fas fa-clock"></i> {{ inscription.formation.duree }}
+                    </p>
+                    <p class="card-text small">
+                        <strong>Date d'inscription:</strong> {{ inscription.date_inscription|date:"d F Y à H:i" }}
+                    </p>
+                    {% if inscription.formation.certificat and inscription.statut == 'termine' %}
+                        {% if inscription.certificat %}
+                        <a href="{% url 'academia:telecharger_certificat' inscription.certificat.id %}" class="btn btn-success btn-sm">
+                            <i class="fas fa-certificate"></i> Télécharger le certificat
+                        </a>
+                        {% else %}
+                        <span class="badge bg-warning">Certificat en préparation</span>
+                        {% endif %}
+                    {% endif %}
+                    <a href="{% url 'academia:detail_formation' inscription.formation.slug %}" class="btn btn-primary btn-sm">Voir les détails</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <h4>Aucune formation</h4>
+        <p>Vous n'êtes inscrit à aucune formation pour le moment.</p>
+        <a href="{% url 'academia:liste_formations' %}" class="btn btn-primary">Voir les formations</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+

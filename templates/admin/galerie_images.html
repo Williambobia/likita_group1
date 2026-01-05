@@ -1,0 +1,362 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Galerie d'Images | Administration LIKITA Group{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .galerie-container {
+        margin-top: 20px;
+    }
+    
+    .galerie-filters {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: var(--likita-beige);
+        border-radius: 10px;
+    }
+    
+    .galerie-filters .btn {
+        margin: 5px;
+    }
+    
+    .galerie-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .galerie-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .galerie-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    
+    .galerie-card-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background: var(--likita-beige);
+    }
+    
+    .galerie-card-body {
+        padding: 15px;
+    }
+    
+    .galerie-card-title {
+        font-weight: 600;
+        color: var(--likita-brown);
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+    }
+    
+    .galerie-card-type {
+        font-size: 0.8rem;
+        color: #666;
+    }
+    
+    .galerie-stats {
+        background: var(--likita-yellow);
+        color: var(--likita-brown);
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    .galerie-section {
+        margin-bottom: 40px;
+    }
+    
+    .galerie-section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--likita-brown);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid var(--likita-yellow);
+    }
+    
+    .empty-galerie {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="galerie-container">
+    <h1 style="color: var(--likita-brown); margin-bottom: 20px;">
+        <i class="fas fa-images"></i> Galerie d'Images
+    </h1>
+    
+    <div class="galerie-stats">
+        <i class="fas fa-image"></i> Total: <strong>{{ total_images }} image(s)</strong>
+    </div>
+    
+    <!-- Filtres -->
+    <div class="galerie-filters">
+        <strong style="color: var(--likita-brown); margin-right: 15px;">Filtrer par catégorie:</strong>
+        <button class="btn btn-sm filter-btn active" data-filter="all">Toutes</button>
+        {% if images_data.logos %}
+        <button class="btn btn-sm filter-btn" data-filter="logos">Logos ({{ images_data.logos|length }})</button>
+        {% endif %}
+        {% if images_data.equipe %}
+        <button class="btn btn-sm filter-btn" data-filter="equipe">Équipe ({{ images_data.equipe|length }})</button>
+        {% endif %}
+        {% if images_data.evenements %}
+        <button class="btn btn-sm filter-btn" data-filter="evenements">Événements ({{ images_data.evenements|length }})</button>
+        {% endif %}
+        {% if images_data.galerie_evenements %}
+        <button class="btn btn-sm filter-btn" data-filter="galerie_evenements">Galerie Événements ({{ images_data.galerie_evenements|length }})</button>
+        {% endif %}
+        {% if images_data.formations %}
+        <button class="btn btn-sm filter-btn" data-filter="formations">Formations ({{ images_data.formations|length }})</button>
+        {% endif %}
+        {% if images_data.emissions %}
+        <button class="btn btn-sm filter-btn" data-filter="emissions">Émissions ({{ images_data.emissions|length }})</button>
+        {% endif %}
+        {% if images_data.blog %}
+        <button class="btn btn-sm filter-btn" data-filter="blog">Blog ({{ images_data.blog|length }})</button>
+        {% endif %}
+    </div>
+    
+    <!-- Galerie par catégorie -->
+    {% if images_data.logos %}
+    <div class="galerie-section galerie-category" data-category="logos">
+        <h2 class="galerie-section-title">
+            <i class="fas fa-image"></i> Logos ({{ images_data.logos|length }})
+        </h2>
+        <div class="galerie-grid">
+            {% for image in images_data.logos %}
+            <div class="galerie-card galerie-item" data-category="logos">
+                <img src="{{ image.url }}" alt="{{ image.nom }}" class="galerie-card-img" style="object-fit: contain; padding: 10px; background: #f0f0f0;">
+                <div class="galerie-card-body">
+                    <div class="galerie-card-title">{{ image.nom }}</div>
+                    <div class="galerie-card-type">{{ image.type }}</div>
+                    {% if image.objet_type == 'logo' %}
+                    <div style="margin-top: 10px;">
+                        <a href="{% url 'admin:core_logo_change' image.objet.id %}" class="btn btn-sm" style="background: var(--likita-yellow); color: var(--likita-brown);">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                    </div>
+                    {% else %}
+                    <div style="margin-top: 10px;">
+                        <small class="text-muted">Logo statique - Utilisez le modèle Logo pour gérer</small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if images_data.equipe %}
+    <div class="galerie-section galerie-category" data-category="equipe">
+        <h2 class="galerie-section-title">
+            <i class="fas fa-users"></i> Équipe ({{ images_data.equipe|length }})
+        </h2>
+        <div class="galerie-grid">
+            {% for image in images_data.equipe %}
+            <div class="galerie-card galerie-item" data-category="equipe">
+                <img src="{{ image.url }}" alt="{{ image.nom }}" class="galerie-card-img">
+                <div class="galerie-card-body">
+                    <div class="galerie-card-title">{{ image.nom }}</div>
+                    <div class="galerie-card-type">{{ image.type }}</div>
+                    {% if image.objet %}
+                    <div style="margin-top: 10px;">
+                        {% if image.objet_type == 'messagedirectrice' %}
+                            <a href="{% url 'admin:core_messagedirectrice_change' image.objet.id %}" class="btn btn-sm" style="background: var(--likita-yellow); color: var(--likita-brown);">
+                                <i class="fas fa-edit"></i> Modifier
+                            </a>
+                        {% else %}
+                            <a href="{% url 'admin:core_membre_change' image.objet.id %}" class="btn btn-sm" style="background: var(--likita-yellow); color: var(--likita-brown);">
+                                <i class="fas fa-edit"></i> Modifier
+                            </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if images_data.evenements %}
+    <div class="galerie-section galerie-category" data-category="evenements">
+        <h2 class="galerie-section-title">
+            <i class="fas fa-calendar"></i> Événements ({{ images_data.evenements|length }})
+        </h2>
+        <div class="galerie-grid">
+            {% for image in images_data.evenements %}
+            <div class="galerie-card galerie-item" data-category="evenements">
+                <img src="{{ image.url }}" alt="{{ image.nom }}" class="galerie-card-img">
+                <div class="galerie-card-body">
+                    <div class="galerie-card-title">{{ image.nom }}</div>
+                    <div class="galerie-card-type">{{ image.type }}</div>
+                    {% if image.objet %}
+                    <div style="margin-top: 10px;">
+                        <a href="{% url 'admin:events_evenement_change' image.objet.id %}" class="btn btn-sm" style="background: var(--likita-yellow); color: var(--likita-brown);">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if images_data.galerie_evenements %}
+    <div class="galerie-section galerie-category" data-category="galerie_evenements">
+        <h2 class="galerie-section-title">
+            <i class="fas fa-photo-video"></i> Galerie Événements ({{ images_data.galerie_evenements|length }})
+        </h2>
+        <div class="galerie-grid">
+            {% for image in images_data.galerie_evenements %}
+            <div class="galerie-card galerie-item" data-category="galerie_evenements">
+                <img src="{{ image.url }}" alt="{{ image.nom }}" class="galerie-card-img">
+                <div class="galerie-card-body">
+                    <div class="galerie-card-title">{{ image.nom }}</div>
+                    <div class="galerie-card-type">{{ image.type }}</div>
+                    {% if image.objet %}
+                    <div style="margin-top: 10px;">
+                        <a href="{% url 'admin:events_galerieevenement_change' image.objet.id %}" class="btn btn-sm" style="background: var(--likita-yellow); color: var(--likita-brown);">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if images_data.formations %}
+    <div class="galerie-section galerie-category" data-category="formations">
+        <h2 class="galerie-section-title">
+            <i class="fas fa-graduation-cap"></i> Formations ({{ images_data.formations|length }})
+        </h2>
+        <div class="galerie-grid">
+            {% for image in images_data.formations %}
+            <div class="galerie-card galerie-item" data-category="formations">
+                <img src="{{ image.url }}" alt="{{ image.nom }}" class="galerie-card-img">
+                <div class="galerie-card-body">
+                    <div class="galerie-card-title">{{ image.nom }}</div>
+                    <div class="galerie-card-type">{{ image.type }}</div>
+                    {% if image.objet %}
+                    <div style="margin-top: 10px;">
+                        <a href="{% url 'admin:academia_formation_change' image.objet.id %}" class="btn btn-sm" style="background: var(--likita-yellow); color: var(--likita-brown);">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if images_data.emissions %}
+    <div class="galerie-section galerie-category" data-category="emissions">
+        <h2 class="galerie-section-title">
+            <i class="fas fa-video"></i> Émissions ({{ images_data.emissions|length }})
+        </h2>
+        <div class="galerie-grid">
+            {% for image in images_data.emissions %}
+            <div class="galerie-card galerie-item" data-category="emissions">
+                <img src="{{ image.url }}" alt="{{ image.nom }}" class="galerie-card-img">
+                <div class="galerie-card-body">
+                    <div class="galerie-card-title">{{ image.nom }}</div>
+                    <div class="galerie-card-type">{{ image.type }}</div>
+                    {% if image.objet %}
+                    <div style="margin-top: 10px;">
+                        <a href="{% url 'admin:media_app_emission_change' image.objet.id %}" class="btn btn-sm" style="background: var(--likita-yellow); color: var(--likita-brown);">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if images_data.blog %}
+    <div class="galerie-section galerie-category" data-category="blog">
+        <h2 class="galerie-section-title">
+            <i class="fas fa-blog"></i> Blog ({{ images_data.blog|length }})
+        </h2>
+        <div class="galerie-grid">
+            {% for image in images_data.blog %}
+            <div class="galerie-card galerie-item" data-category="blog">
+                <img src="{{ image.url }}" alt="{{ image.nom }}" class="galerie-card-img">
+                <div class="galerie-card-body">
+                    <div class="galerie-card-title">{{ image.nom }}</div>
+                    <div class="galerie-card-type">{{ image.type }}</div>
+                    {% if image.objet %}
+                    <div style="margin-top: 10px;">
+                        <a href="{% url 'admin:blog_article_change' image.objet.id %}" class="btn btn-sm" style="background: var(--likita-yellow); color: var(--likita-brown);">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if total_images == 0 %}
+    <div class="empty-galerie">
+        <i class="fas fa-images fa-4x" style="color: #ccc; margin-bottom: 20px;"></i>
+        <p>Aucune image disponible pour le moment.</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const categorySections = document.querySelectorAll('.galerie-category');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            
+            // Mettre à jour les boutons actifs
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filtrer les sections
+            categorySections.forEach(section => {
+                if (filter === 'all' || section.getAttribute('data-category') === filter) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
+
