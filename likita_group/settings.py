@@ -151,3 +151,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER = 'votre-email@gmail.com'
 # EMAIL_HOST_PASSWORD = 'votre-mot-de-passe'
 
+# Static files (CSS, JavaScript, images)
+STATIC_URL = "/static/"
+
+# Dossier où collectstatic copiera tous les fichiers
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# WhiteNoise pour rendre les fichiers statiques en production
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
