@@ -1,22 +1,16 @@
-"""
-Django settings for likita_group project.
-"""
-
 from pathlib import Path
 import os
+import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ============================
+# SECURITY
+# ============================
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-secret-key")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-change-this-in-production-!@#$%^&*()'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "likita-group1.onrender.com",
@@ -25,9 +19,9 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
 ]
 
-
-
-# Application definition
+# ============================
+# APPLICATIONS
+# ============================
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -36,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # Apps locales
     'apps.core',
     'apps.users',
@@ -43,10 +38,11 @@ INSTALLED_APPS = [
     'apps.events',
     'apps.academia',
     'apps.blog',
-        
-
 ]
 
+# ============================
+# MIDDLEWARE
+# ============================
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -60,10 +56,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
-
-
-
+# ============================
+# URLS & TEMPLATES
+# ============================
 
 ROOT_URLCONF = 'likita_group.urls'
 
@@ -86,88 +81,62 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'likita_group.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+# ============================
+# DATABASE (RENDER)
+# ============================
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True,
+    )
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+# ============================
+# PASSWORDS
+# ============================
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
+# ============================
+# LOCALISATION
+# ============================
 
 LANGUAGE_CODE = 'fr-fr'
-
 TIME_ZONE = 'Africa/Kinshasa'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-
+# ============================
+# STATIC FILES (RENDER)
+# ============================
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# ============================
+# MEDIA FILES
+# ============================
 
-# Media files
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+# ============================
+# DEFAULTS
+# ============================
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Custom User Model (si vous voulez personnaliser)
-# AUTH_USER_MODEL = 'users.CustomUser'
-
-# Login URLs
 LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Email configuration (pour la réinitialisation de mot de passe)
-# En développement, les emails sont affichés dans la console
-# En production, configurez un vrai serveur SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# Pour la production, utilisez :
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'votre-email@gmail.com'
-# EMAIL_HOST_PASSWORD = 'votre-mot-de-passe'
-
-# Static files (CSS, JavaScript, images)
-
