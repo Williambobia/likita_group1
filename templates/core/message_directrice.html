@@ -6,25 +6,27 @@
 {% block content %}
 <div class="container py-5">
     {% if message %}
-    <div class="row">
-        <div class="col-lg-10 mx-auto">
+    <div class="row justify-content-center">
+        <div class="col-lg-11 col-xl-10">
             <div class="card shadow-lg border-0">
                 <div class="card-body p-5">
-                    <div class="row">
+                    <div class="row align-items-start">
                         {% if message.photo %}
-                        <div class="col-md-4 text-center mb-4 mb-md-0">
+                        <div class="col-md-4 col-lg-3 text-center mb-4 mb-md-0">
                             <img src="{{ message.photo.url }}" alt="{{ message.signature }}" 
-                                 class="img-fluid rounded-circle shadow" style="max-width: 300px;">
+                                 class="img-fluid rounded-circle shadow-lg directrice-photo-page" style="max-width: 100%; width: 280px;">
                         </div>
+                        <div class="col-md-8 col-lg-9">
+                        {% else %}
+                        <div class="col-12">
                         {% endif %}
-                        <div class="col-md-8">
                             <h1 class="display-5 text-primary mb-4">{{ message.titre }}</h1>
-                            <div class="message-content" style="font-size: 1.1rem; line-height: 1.8;">
+                            <div class="message-content" style="font-size: 1.1rem; line-height: 1.8; color: var(--likita-brown);">
                                 {{ message.contenu|linebreaks }}
                             </div>
                             <div class="mt-4 pt-4 border-top">
                                 <p class="mb-0">
-                                    <strong class="fs-4">{{ message.signature }}</strong><br>
+                                    <strong class="fs-4" style="color: var(--likita-brown);">{{ message.signature }}</strong><br>
                                     <span class="text-muted">{{ message.fonction }}</span>
                                 </p>
                                 <div class="mt-3">

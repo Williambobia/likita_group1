@@ -52,3 +52,5 @@ except Exception as e:
     print("3. Ou installer via: pip install poppler-utils")
     sys.exit(1)
 
+
+

@@ -153,3 +153,5 @@ print("   - http://127.0.0.1:8000/vision-mission/")
 print("\n3. Pour ajouter les descriptions detailees des services,")
 print("   modifiez les contenus dans l'admin pour chaque service.")
 
+
+

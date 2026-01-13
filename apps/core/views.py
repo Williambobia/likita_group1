@@ -24,9 +24,38 @@ def home(request):
         pour_carrousel=True
     ).order_by('ordre_affichage', 'date_creation')[:10])
     
+    # Récupérer la directrice
+    message_directrice = MessageDirectrice.objects.filter(actif=True).first()
+    
+    # Récupérer les membres (exclure la directrice "Pulumba Nadine" pour éviter les doublons)
+    membres = Membre.objects.filter(actif=True).exclude(
+        nom__icontains='Pulumba'
+    ).exclude(
+        prenom__icontains='Nadine'
+    )[:6]
+    
+    # Créer une liste combinée pour l'affichage dans la section équipe
+    # La directrice sera affichée en premier si elle a une photo
+    membres_avec_directrice = []
+    if message_directrice and message_directrice.photo:
+        # Créer un objet membre virtuel pour la directrice
+        directrice_membre = type('DirectriceMembre', (), {
+            'photo': message_directrice.photo,
+            'nom_complet': message_directrice.signature,
+            'fonction': message_directrice.fonction,
+            'biographie': message_directrice.biographie_complete or '',
+            'nom': message_directrice.signature.split()[0] if message_directrice.signature else '',
+            'prenom': ' '.join(message_directrice.signature.split()[1:]) if len(message_directrice.signature.split()) > 1 else '',
+            'is_directrice': True,
+        })()
+        membres_avec_directrice.append(directrice_membre)
+    
+    # Ajouter les autres membres
+    membres_avec_directrice.extend(list(membres))
+    
     context = {
-        'message_directrice': MessageDirectrice.objects.filter(actif=True).first(),
-        'membres': Membre.objects.filter(actif=True)[:6],  # Afficher les 6 premiers
+        'message_directrice': message_directrice,
+        'membres': membres_avec_directrice,  # Liste avec directrice en premier
         'vision': VisionMission.objects.filter(type='vision', actif=True).first(),
         'mission': VisionMission.objects.filter(type='mission', actif=True).first(),
         'valeurs': VisionMission.objects.filter(type='valeur', actif=True).order_by('ordre_affichage'),
@@ -48,8 +77,38 @@ def about(request):
         pour_carrousel=True
     ).order_by('ordre_affichage', 'date_creation')[:8]
     
+    # Récupérer la directrice
+    message_directrice = MessageDirectrice.objects.filter(actif=True).first()
+    
+    # Récupérer les membres (exclure la directrice si elle est aussi dans les membres)
+    # Exclure "Pulumba" et "Nadine" pour éviter les doublons
+    membres = Membre.objects.filter(actif=True).exclude(
+        nom__icontains='Pulumba'
+    ).exclude(
+        prenom__icontains='Nadine'
+    )
+    
+    # Créer une liste combinée pour l'affichage dans la section équipe
+    # La directrice sera affichée en premier si elle a une photo
+    membres_avec_directrice = []
+    if message_directrice and message_directrice.photo:
+        # Créer un objet membre virtuel pour la directrice
+        directrice_membre = type('DirectriceMembre', (), {
+            'photo': message_directrice.photo,
+            'nom_complet': message_directrice.signature,
+            'fonction': message_directrice.fonction,
+            'biographie': message_directrice.biographie_complete or '',
+            'nom': message_directrice.signature.split()[0] if message_directrice.signature else '',
+            'prenom': ' '.join(message_directrice.signature.split()[1:]) if len(message_directrice.signature.split()) > 1 else '',
+            'is_directrice': True,
+        })()
+        membres_avec_directrice.append(directrice_membre)
+    
+    # Ajouter les autres membres
+    membres_avec_directrice.extend(list(membres))
+    
     context = {
-        'membres': Membre.objects.filter(actif=True),
+        'membres': membres_avec_directrice,  # Liste avec directrice en premier
         'vision': VisionMission.objects.filter(type='vision', actif=True).first(),
         'mission': VisionMission.objects.filter(type='mission', actif=True).first(),
         'valeurs': VisionMission.objects.filter(type='valeur', actif=True).order_by('ordre_affichage'),
@@ -105,7 +164,7 @@ def contact(request):
                 subject=f'Contact LIKITA Group: {sujet}',
                 message=f'De: {nom} ({email})\n\n{message}',
                 from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else email,
-                recipient_list=[settings.CONTACT_EMAIL if hasattr(settings, 'CONTACT_EMAIL') else 'contact@likitagroup.com'],
+                recipient_list=[settings.CONTACT_EMAIL if hasattr(settings, 'CONTACT_EMAIL') else 'likitaofficiel@gmail.com'],
                 fail_silently=True,
             )
             messages.success(request, 'Votre message a été envoyé avec succès! Nous vous répondrons dans les plus brefs délais.')
@@ -121,21 +180,20 @@ def galerie_activites(request):
     """Page publique de la galerie d'activités et événements"""
     from apps.events.models import GalerieEvenement, Evenement
     
-    # Récupérer toutes les images de la galerie d'événements (exclure les images du carrousel)
+    # Récupérer toutes les images de la galerie d'événements
+    # Inclure toutes les photos, même celles du carrousel et sans événement
     galerie_items = GalerieEvenement.objects.filter(
         image__isnull=False
     ).exclude(
         image=''
-    ).filter(
-        pour_carrousel=False
-    ).exclude(
-        evenement__isnull=True
-    ).select_related('evenement')
+    ).select_related('evenement').order_by('-date_creation')
     
     # Grouper par événement
     evenements_avec_galerie = {}
+    images_sans_evenement = []
+    
     for item in galerie_items:
-        if item.evenement:  # S'assurer que l'événement existe
+        if item.evenement:  # Si l'image a un événement associé
             evenement_id = item.evenement.id
             if evenement_id not in evenements_avec_galerie:
                 evenements_avec_galerie[evenement_id] = {
@@ -143,6 +201,20 @@ def galerie_activites(request):
                     'images': []
                 }
             evenements_avec_galerie[evenement_id]['images'].append(item)
+        else:  # Images sans événement associé
+            images_sans_evenement.append(item)
+    
+    # Si il y a des images sans événement, créer une section "Autres photos"
+    if images_sans_evenement:
+        evenements_avec_galerie[0] = {
+            'evenement': type('Evenement', (), {
+                'id': 0,
+                'titre': 'Autres Photos',
+                'lieu': '',
+                'date_debut': None,
+            })(),
+            'images': images_sans_evenement
+        }
     
     # Toutes les images pour la vue mosaïque
     toutes_images = list(galerie_items)

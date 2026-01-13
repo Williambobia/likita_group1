@@ -240,8 +240,8 @@ Ce projet est la propriété de LIKITA Group. Tous droits réservés.
 ## 👥 Contact
 
 Pour toute question ou information :
-- Email : contact@likitagroup.com
-- Téléphone : +243 XXX XXX XXX
+- Email : likitaofficiel@gmail.com
+- Téléphone : +243 895918786
 - Linktree : https://linktr.ee/likitagroup
 
 ## 🤝 Contribution

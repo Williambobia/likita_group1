@@ -69,3 +69,5 @@ except Exception as e:
     print(f"\n💡 Solution: Installez PyMuPDF avec: pip install PyMuPDF")
     sys.exit(1)
 
+
+

@@ -46,19 +46,21 @@
 <section class="section-beige py-5">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-10">
+            <div class="col-lg-11 col-xl-10">
                 <div class="directrice-card">
-                    <div class="row g-0">
+                    <div class="row g-0 align-items-stretch">
                         {% if message_directrice.photo %}
-                        <div class="col-md-4 directrice-photo-wrapper">
+                        <div class="col-md-5 col-lg-4 directrice-photo-wrapper">
                             <div class="directrice-photo">
                                 <img src="{{ message_directrice.photo.url }}" alt="{{ message_directrice.signature }}" 
                                      class="img-fluid">
                                 <div class="photo-overlay"></div>
                             </div>
                         </div>
+                        <div class="col-md-7 col-lg-8">
+                        {% else %}
+                        <div class="col-12">
                         {% endif %}
-                        <div class="col-md-8">
                             <div class="directrice-content">
                                 <span class="section-badge">Message</span>
                                 <h2 class="section-title mb-4">{{ message_directrice.titre }}</h2>
@@ -130,10 +132,10 @@
             <span class="section-badge section-badge-light">Nos Fondements</span>
             <h2 class="section-title section-title-light">Nos Valeurs</h2>
         </div>
-        <div class="row g-4">
+        <div class="row g-4 justify-content-center">
             {% for valeur in valeurs %}
             {% if valeur.ordre_affichage <= 4 %}
-            <div class="col-md-3">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                 <div class="valeur-card">
                     <div class="valeur-icon-wrapper">
                         {% if valeur.icone %}
@@ -163,7 +165,8 @@
                     <div class="card-body text-center p-4">
                         <i class="fas fa-video fa-4x mb-3 text-primary"></i>
                         <h4 style="color: var(--likita-brown);">Émission LIKITA</h4>
-                        <p style="color: var(--likita-brown);">Une plateforme médiatique qui met en lumière des histoires inspirantes de femmes, promeut leurs réalisations et partage des témoignages et conseils pratiques.</p>
+                        <p style="color: var(--likita-brown);">L'émission Likita met en lumière les parcours inspirants des femmes dans divers domaines. Elle constitue un espace de libre expression qui promeut les œuvres féminines et met en avant les initiatives qu'elles portent.</p>
+                        <p style="color: var(--likita-brown);" class="mt-3">C'est une école qui éduque les femmes, valorise leur travail, leurs expériences et leurs parcours, tout en leur offrant la liberté de s'exprimer pleinement.</p>
                         <a href="{% url 'media_app:liste_emissions' %}" class="btn btn-primary">Voir les émissions</a>
                     </div>
                 </div>
@@ -183,7 +186,8 @@
                     <div class="card-body text-center p-4">
                         <i class="fas fa-graduation-cap fa-4x mb-3 text-primary"></i>
                         <h4 style="color: var(--likita-brown);">LIKITA Academia</h4>
-                        <p style="color: var(--likita-brown);">Un centre de formation dédié au développement personnel et professionnel avec des programmes variés et des certifications.</p>
+                        <p style="color: var(--likita-brown);">Likita Academia est un centre de formation dédié à la professionnalisation et au développement personnel des jeunes. Nous proposons des formations sur mesure, essentiellement pratiques, qui permettent aux apprenants d'acquérir les compétences nécessaires pour trouver un emploi ou structurer leurs projets.</p>
+                        <p style="color: var(--likita-brown);" class="mt-3">Nous formons dans divers secteurs, mais notre spécialité est d'accompagner les jeunes souhaitant évoluer dans l'entrepreneuriat. Après la formation, nous offrons un suivi personnalisé pour aider à orienter et rediriger les projets. Toutes nos formations sont certifiées et animées par des professionnels expérimentés.</p>
                         <a href="{% url 'academia:liste_formations' %}" class="btn btn-primary">Voir les formations</a>
                     </div>
                 </div>
@@ -193,7 +197,8 @@
                     <div class="card-body text-center p-4">
                         <i class="fas fa-users fa-4x mb-3 text-white"></i>
                         <h4 class="text-white">Forum Mwasi Mwinda</h4>
-                        <p class="text-white">Un événement annuel qui célèbre les réalisations féminines et encourage le dialogue sur des sujets d'actualité.</p>
+                        <p class="text-white mb-3">Le Forum Mwasi Mwinda est un espace privilégié dédié aux femmes entrepreneurs. Il offre une plateforme où elles peuvent échanger, partager leurs expériences, exposer leurs produits et réfléchir ensemble aux défis qui font partie de leur quotidien.</p>
+                        <p class="text-white mb-4">Cet événement se déroule chaque année dans un cadre accueillant, réunissant des femmes et des hommes passionnés par l'entrepreneuriat et l'innovation. Ensemble, ils partagent des idées, tissent des liens et s'encouragent mutuellement vers de nouveaux horizons.</p>
                         <a href="{% url 'events:liste_evenements' %}?type=forum" class="btn btn-light">En savoir plus</a>
                     </div>
                 </div>
@@ -213,7 +218,7 @@
         <div class="row g-4">
             {% for membre in membres %}
             <div class="col-md-4 col-lg-3">
-                <div class="team-card">
+                <div class="team-card {% if membre.is_directrice %}team-card-directrice{% endif %}">
                     <div class="team-photo-wrapper">
                         {% if membre.photo %}
                         <img src="{{ membre.photo.url }}" alt="{{ membre.nom_complet }}" class="team-photo">
@@ -222,8 +227,18 @@
                             <i class="fas fa-user"></i>
                         </div>
                         {% endif %}
+                        {% if membre.is_directrice %}
+                        <div class="directrice-badge">
+                            <i class="fas fa-crown"></i> Directrice
+                        </div>
+                        {% endif %}
                         <div class="team-overlay">
                             <div class="team-social">
+                                {% if membre.is_directrice %}
+                                <a href="{% url 'core:biographie_directrice' %}" class="team-social-link" title="Voir la biographie">
+                                    <i class="fas fa-user"></i>
+                                </a>
+                                {% endif %}
                                 <a href="#" class="team-social-link"><i class="fas fa-envelope"></i></a>
                             </div>
                         </div>

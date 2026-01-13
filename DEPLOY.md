@@ -139,3 +139,5 @@ gunicorn likita_group.wsgi:application --bind 127.0.0.1:8000 --workers 3
 
 Pour plus d'informations, consultez la [documentation Django](https://docs.djangoproject.com/en/stable/howto/deployment/).
 
+
+

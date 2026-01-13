@@ -13,3 +13,5 @@ def logos(request):
         'logo_favicon': logo_favicon,
     }
 
+
+
