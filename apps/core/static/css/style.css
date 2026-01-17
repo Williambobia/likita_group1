@@ -1343,3 +1343,14 @@ i.fas, i.far, i.fab {
     }
 }
 
+.pole-logo {
+    max-width: 90px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.forum-logo {
+    max-width: 110px;
+    height: auto;
+    margin-bottom: 15px;
+}
