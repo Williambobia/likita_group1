@@ -1354,3 +1354,19 @@ i.fas, i.far, i.fab {
     height: auto;
     margin-bottom: 15px;
 }
+.hero-circle {
+    width: 260px;
+    height: 260px;
+    background-color: #f5b400; /* jaune actuel */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.hero-logo {
+    width: 65%;
+    height: auto;
+    border-radius: 50%; /* rend le logo rond */
+}
