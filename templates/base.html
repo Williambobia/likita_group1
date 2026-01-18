@@ -6,9 +6,9 @@
     <title>{% block title %}LIKITA Group{% endblock %}</title>
     {% load static %}
     {% if logo_favicon and logo_favicon.fichier %}
-        <link rel="icon" type="image/png" href="{{ logo_favicon.fichier.url }}">
+        <link rel="icon" type="image/png" href="{{ logo.fichier.url }}">
     {% else %}
-        <link rel="icon" type="image/png" href="{% static 'images/logos/logo_favicon.png' %}" onerror="this.remove();">
+        <link rel="icon" type="image/png" href="{% static 'images/logos/logo.png' %}" onerror="this.remove();">
     {% endif %}
     
     <!-- Google Fonts - Charte LIKITA -->
@@ -30,11 +30,11 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="{% url 'core:home' %}" title="LIKITA Group - Accueil">
-                {% if logo_principal and logo_principal.fichier %}
-                    <img src="{{ logo_principal.fichier.url }}" alt="LIKITA Group" class="logo-image">
+                {% if logo and logo.fichier %}
+                    <img src="{{ logo.fichier.url }}" alt="LIKITA Group" class="logo-image">
                 {% else %}
                     {% load static %}
-                    <img src="{% static 'images/logos/logo_principal.png' %}" alt="LIKITA Group" class="logo-image" onerror="this.style.display='none';">
+                    <img src="{% static 'images/logos/logo.png' %}" alt="LIKITA Group" class="logo-image" onerror="this.style.display='none';">
                 {% endif %}
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -118,11 +118,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    {% if logo_footer and logo_footer.fichier %}
-                        <img src="{{ logo_footer.fichier.url }}" alt="LIKITA Group" height="60" class="mb-3 logo-image" style="max-height: 60px; width: auto; object-fit: contain;">
+                    {% if logo and logo.fichier %}
+                        <img src="{{ logo.fichier.url }}" alt="LIKITA Group" height="60" class="mb-3 logo-image" style="max-height: 60px; width: auto; object-fit: contain;">
                     {% else %}
                         {% load static %}
-                        <img src="{% static 'images/logos/logo_footer.png' %}" alt="LIKITA Group" height="60" class="mb-3 logo-image" style="max-height: 60px; width: auto; object-fit: contain;" onerror="this.style.display='none';">
+                        <img src="{% static 'images/logos/logo.png' %}" alt="LIKITA Group" height="60" class="mb-3 logo-image" style="max-height: 60px; width: auto; object-fit: contain;" onerror="this.style.display='none';">
                     {% endif %}
                     <h5>LIKITA Group</h5>
                     <p>Likita Group est une entreprise multisectorielle spécialisée dans la communication, formations et organisations d'événements !</p>
