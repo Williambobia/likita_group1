@@ -1341,19 +1341,17 @@ i.fas, i.far, i.fab {
     height: auto;
     margin-bottom: 15px;
 }
-.hero-illustration {
+.hero-circle {
     width: 260px;
     height: 260px;
     border-radius: 50%;
-    overflow: hidden;            /* OBLIGATOIRE */
-    background-color: #f5b400;   /* sécurité */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-    display: flex;
-}
+    background-color: #f5b400;
 
-.hero-logo-full {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;           /* REMPLIT LE ROND */
+    background-image: url("/static/images/hero/likita_group_round.png");
+    background-size: cover;        /* REMPLIT LE ROND */
+    background-position: center;   /* CENTRÉ */
+    background-repeat: no-repeat;
+
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
 }
 
